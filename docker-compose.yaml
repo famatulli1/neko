@@ -5,15 +5,12 @@ services:
     shm_size: "2gb"
     cap_add:
       - SYS_ADMIN
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.services.neko-frontend.loadbalancer.server.port=8080"
+      - "traefik.http.routers.neko.rule=${TRAEFIK_RULE}"
+      - "traefik.http.routers.neko.entrypoints=${TRAEFIK_ENTRYPOINTS}"
+      - "traefik.http.routers.neko.tls.certresolver=${TRAEFIK_CERTRESOLVER}"
     ports:
       - "8080:8080"
       - "52000-52100:52000-52100/udp"
-    volumes:
-      - <your-host-path>:/home/neko/.config/chromium # persist chromium settings
-    environment:
-      NEKO_DESKTOP_SCREEN: '1920x1080@30'
-      NEKO_MEMBER_MULTIUSER_USER_PASSWORD: neko
-      NEKO_MEMBER_MULTIUSER_ADMIN_PASSWORD: admin
-      NEKO_WEBRTC_EPR: 52000-52100
-      NEKO_WEBRTC_ICELITE: 1
-      NEKO_WEBRTC_NAT1TO1: 38.242.150.67
